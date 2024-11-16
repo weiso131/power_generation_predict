@@ -45,8 +45,7 @@ def spilt_data_with_datetime(df: pd.DataFrame, location_ori):
     data_df = df.drop(columns=['DateTime', 'Power(mW)', 'WindSpeed(m/s)', 'Pressure(hpa)'])
     label_df = df['Power(mW)']
 
-    data_list = []
-    label_list = []
+    data_label_list = []
     last_index = 0
 
     start_time = []
@@ -59,9 +58,25 @@ def spilt_data_with_datetime(df: pd.DataFrame, location_ori):
                 location_ori[i] != location_ori[i - 1]:
             
             start_time.append(datetime_list[last_index].hour)
+            data = torch.from_numpy(np.array(data_df.iloc[last_index: i]))
+            label = torch.from_numpy(np.array(label_df.iloc[last_index: i]))
 
-            data_list.append(torch.from_numpy(np.array(data_df.iloc[last_index: i])))
-            label_list.append(torch.from_numpy(np.array(label_df.iloc[last_index:i])))
+            data_label_list.append((len(data), data, label))
             last_index = i
-        
-    return data_list, label_list, start_time
+    
+    return data_label_list, start_time
+
+def sort_by_length(data_label_list):
+    data_label_list = sorted(data_label_list, key=lambda x: x[0])
+
+    data_list = []
+    label_list = []
+    length = []
+
+    for l, data, label in data_label_list:
+        data_list.append(data)
+        label_list.append(label)
+        length.append(l)
+
+    return data_list, label_list, length
+
