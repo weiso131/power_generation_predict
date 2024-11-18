@@ -32,7 +32,6 @@ def mean_10min(df):
         l_df.set_index('DateTime', inplace=True)
         l_df = l_df.resample('10min').mean().dropna()  
         l_df = l_df.reset_index()
-        l_df['hour'] = l_df['DateTime'].dt.hour
 
         new_df = pd.concat([new_df, l_df], ignore_index=True)
     
@@ -66,17 +65,4 @@ def spilt_data_with_datetime(df: pd.DataFrame, location_ori):
     
     return data_label_list, start_time
 
-def sort_by_length(data_label_list):
-    data_label_list = sorted(data_label_list, key=lambda x: x[0])
-
-    data_list = []
-    label_list = []
-    length = []
-
-    for l, data, label in data_label_list:
-        data_list.append(data)
-        label_list.append(label)
-        length.append(l)
-
-    return data_list, label_list, length
 
