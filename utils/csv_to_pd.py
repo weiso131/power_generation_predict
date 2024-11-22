@@ -19,7 +19,7 @@ def read_dir_csv(path="train"):
             df = pd.concat([df, df_temp])
     return df
 
-def mean_10min(df):
+def mean_min(df, split_time=10):
     """
     將資料按時間區做平均
     """
@@ -30,7 +30,7 @@ def mean_10min(df):
     for l in location:
         l_df = df[df["LocationCode"] == l]
         l_df.set_index('DateTime', inplace=True)
-        l_df = l_df.resample('10min').mean().dropna()  
+        l_df = l_df.resample(f"{split_time}min").mean().dropna()  
         l_df = l_df.reset_index()
 
         new_df = pd.concat([new_df, l_df], ignore_index=True)
