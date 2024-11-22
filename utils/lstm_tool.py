@@ -54,9 +54,7 @@ def sliding_window(data_label_list: list[tuple[list]], look_front: int, step=1):
 
 def sort_by_length(data_label_list):
 
-
     data_label_list = sorted(data_label_list, key=lambda x: x[0])
-
     data_list = []
     label_list = []
     length = []
